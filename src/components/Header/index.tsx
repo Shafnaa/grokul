@@ -63,7 +63,7 @@ const Header = (props: {
               src={"/images/logo/logo-icon.svg"}
               alt="Logo"
             />
-            <h1 className="text-2xl font-bold">Sherlock</h1>
+            <h1 className="text-2xl font-bold">GroKul</h1>
           </Link>
         </div>
 
