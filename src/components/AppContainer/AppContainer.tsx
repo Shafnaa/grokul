@@ -7,31 +7,35 @@ export default function AppContainer() {
   const [soilState, setSoilState] = useState<number>(0);
 
   useEffect(() => {
-    const mqttClient = mqtt.connect(
-      "wss://f888816e.ala.asia-southeast1.emqxsl.com:8084/mqtt",
-      {
-        username: "admin",
-        password: "Admin123",
-      },
-    );
+    const interval = setInterval(() => {
+      const mqttClient = mqtt.connect(
+        "wss://f888816e.ala.asia-southeast1.emqxsl.com:8084/mqtt",
+        {
+          username: "admin",
+          password: "Admin123",
+        },
+      );
 
-    mqttClient.on("connect", () => {
-      mqttClient.subscribe("grokul/soil", (err) => {
-        if (!err) {
-          console.log("subscribed");
-        } else {
-          console.log(err);
-        }
+      mqttClient.on("connect", () => {
+        mqttClient.subscribe("grokul/soil", (err) => {
+          if (!err) {
+            console.log("subscribed");
+          } else {
+            console.log(err);
+          }
+        });
       });
-    });
 
-    mqttClient.on("message", async (topic, message) => {
-      if (topic == "grokul/soil") {
-        console.log(message.toString());
-        setSoilState(Number(message));
-      }
-      mqttClient.end();
-    });
+      mqttClient.on("message", async (topic, message) => {
+        if (topic == "grokul/soil") {
+          console.log(message.toString());
+          setSoilState(Number(message));
+        }
+        mqttClient.end();
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleClick = async () => {
